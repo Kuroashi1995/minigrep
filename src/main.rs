@@ -3,13 +3,27 @@ use std::{env, fs};
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    // let query = &args[1];
-    let target = &args[2];
+    let config = parse_config(&args);
 
-    println!("Reading file: {target}");
+    println!("Searching {}", config.query);
+    println!("In file {}", config.file_path);
 
-    let contents = fs::read_to_string(target).expect("Should've been able to read file content");
+    let content = fs::read_to_string(config.file_path).expect("Should be able to read file contents");
 
-    println!("with content:\n{contents}"); //This macro does not take ownership, do all macros
-                                           //behave like this?
+    println!("File content:\n{content}");
+}
+
+// configuration
+
+struct Config {
+    query: String,
+    file_path: String
+
+}
+
+fn parse_config(args: &[String]) -> Config {
+    let query = args[1].clone();
+    let file_path = args[2].clone();
+
+    Config { query, file_path }
 }
